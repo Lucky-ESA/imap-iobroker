@@ -24,6 +24,7 @@ Requirements
 
 * An IMAP server to connect to -- tested with iredmail, gmail, gmx, own server and telekom
 
+[![NPM](https://nodei.co/npm/imap-iobroker.png?downloads=true)](https://nodei.co/npm/imap-iobroker/)
 
 Installation for ioBroker only
 ==============================
@@ -755,6 +756,10 @@ Extensions Supported
     ### **WORK IN PROGRESS**
 -->
 ## Changelog
+### 0.1.1 (2024-11-12)
+
+-   (Lucky-ESA) Fixed @types
+
 ### 0.1.0 (2024-11-12)
 
 -   (Lucky-ESA) Packages updated

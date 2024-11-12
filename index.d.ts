@@ -4,43 +4,45 @@ import { ConnectionOptions } from "tls";
 
 declare namespace Connection {
   // The property names of these interfaces match the documentation (where type names were given).
-  interface ID {
-    name: string,
-    version: string,
-    vendor: string,
-    "support-email": string,
-  }
+
   interface Config {
     /** Username for plain-text authentication. */
     user: string;
     /** Password for plain-text authentication. */
     password: string;
     /** Base64-encoded OAuth token for OAuth authentication for servers that support it (See Andris Reinman's xoauth.js module to help generate this string). */
-    xoauth?: string;
+    xoauth?: string | null;
     /** Base64-encoded OAuth2 token for The SASL XOAUTH2 Mechanism for servers that support it (See Andris Reinman's xoauth2 module to help generate this string). */
-    xoauth2?: string;
+    xoauth2?: string | null;
     /** Hostname or IP address of the IMAP server. Default: "localhost" */
-    host?: string;
+    host?: string | null;
     /** Port number of the IMAP server. Default: 143 */
-    port?: number;
+    port?: number | null;
+    /** Socket timeout. Default 0 */
+    socketTimeout: number;
     /** Client from ioBroker for event */
     client: string;
     /** Active mailbox from ioBroker for event */
     inbox: string;
     /** Add information for 126.com : Pull Request #885 */
-    id?: ID;
+    id?: {
+      name: string,
+      version: string,
+      vendor: string,
+      "support-email": string,
+    } | null | undefined;
     /** Perform implicit TLS connection? Default: false */
-    tls?: boolean;
+    tls?: boolean | null;
     /** Options object to pass to tls.connect() Default: (none) */
-    tlsOptions?: ConnectionOptions;
+    tlsOptions?: ConnectionOptions | null;
     /** Set to 'always' to always attempt connection upgrades via STARTTLS, 'required' only if upgrading is required, or 'never' to never attempt upgrading. Default: 'never' */
-    autotls?: string;
+    autotls?: string | null;
     /** Number of milliseconds to wait for a connection to be established. Default: 10000 */
-    connTimeout?: number;
+    connTimeout?: number | null;
     /** Number of milliseconds to wait to be authenticated after a connection has been established. Default: 5000 */
-    authTimeout?: number;
+    authTimeout?: number | null;
     /** Configures the keepalive mechanism. Set to true to enable keepalive with defaults or set to object to enable and configure keepalive behavior: Default: true */
-    keepalive?: any /* boolean|KeepAlive */;
+    keepalive?: any | null /* boolean|KeepAlive */;
     /** If set, the function will be called with one argument, a string containing some debug info Default: (no debug output) */
     debug?: (info: string) => void;
   }
@@ -280,6 +282,7 @@ declare namespace Connection {
     ): void;
     /** Checks if the server supports the specified capability. */
     serverSupports(capability: string): boolean;
+    /** Provides all functions that the server supports. */
     serverAllSupport(): any;
   }
 }
@@ -349,6 +352,8 @@ declare class Connection extends EventEmitter implements Connection.MessageFunct
   ): void;
   /** Checks if the server supports the specified capability. */
   serverSupports(capability: string): boolean;
+  /** Provides all functions that the server supports. */
+  serverAllSupport(): any;
 
   /**
    * Parses a raw header and returns an object keyed on header fields and the values are Arrays of header field values.
